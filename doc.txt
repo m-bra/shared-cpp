@@ -1,0 +1,40 @@
+This folder contains files that can be shared between all C++ projects.
+Those files are grouped, like a package. For example, the files button.h,
+button.c textfield.h textfield.c widget.h widget.c would all be grouped to the
+"package" with the name "ui".
+Those groups are subject to modification. Those changes must not break the
+other projects by changing interfaces or behaviour or even filenames. If they
+do, however, the whole group/package must be copied. A new version is assigned
+    to the new copy where the change is made.
+
+All directories just after shared/ are group folders.
+All directories just after shared/$GROUP/ are version folders. Their name is a
+simple number.
+The contents of shared/$GROUP/$VERSION/ is the versioned group itself.
+
+Projects depending on a group will symlink to share/$GROUP/$VERSION . This
+way, the project will automatically use all minor changes (probably mainly
+bugfixes), but not the major changes which will have to be manually integrated
+by changing the symlink and adjusting the project to the interface-breaking
+changes.
+
+Advantages:
+ - Sharing code. Reduced redundancy across projects. Redundancy=bad.
+ - A new project has access to already-written code and does not have to
+   reinvent the wheel => Faster coding.
+ - Shared maintainance. Fix one bug for $N projects! Zwei Fliegen mit einer
+   Klatsche.
+ - It's easy. Symlinking should not be that hard.
+ - It's simply cool. I mean, like, versions and symlinking and stuff. So
+   elegant!
+
+Disadvantages:
+ - Shut up, will ya?
+ - Isn't this document a little too informal? Like, for a file named
+   "doc.txt"?! => How about I don't give a duck? (See I'm watching my mouth so
+   stop complaining, okay?!)
+ - Okay, well, then stop adding more stupid points at least...
+ - Oh my, this really looks like there are many disadcantages! 
+
+Conclusion:
+ - Don't do drugs, kids
