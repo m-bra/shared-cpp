@@ -54,6 +54,9 @@ struct FilterIterator
     }
 };
 
+#ifndef MAP_FUNCTION_DEFINED
+#define MAP_FUNCTION_DEFINED
+
 template <typename F>
 struct MapFunction
 {
@@ -71,6 +74,8 @@ struct MapFunction<R(T)>
 {
     typedef R Result;
 };
+
+#endif
 
 // F is a function: R(Element) or R(Element &) or R(Element const &)
 template <typename F, typename I>

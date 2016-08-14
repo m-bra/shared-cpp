@@ -3,6 +3,7 @@
 
 #include "Optional.hpp"
 #include "Iterator.hpp"
+#include "Logger.hpp"
 #include <vector>
 
 template <typename T>
@@ -72,7 +73,10 @@ struct Slots
 		*it = Optional<T>(elt);
 		return {&*it};
 	    }
-        assert(false);
+        LOG_WARNING("No more space for new slots. Killing oldest slots now.");
+	for (auto it = _slots; it != _slots + (size_t)(0.3 * N); ++it)
+	    it->empty = true;
+	add(elt);
 	return 0;
     }
 

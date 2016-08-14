@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <new>
+#include "FunctionTraits.hpp"
 
 template<typename T>
 struct Optional
@@ -26,11 +27,13 @@ struct Optional
 
     T &value()
     {
+	assert(!empty);
 	return _value;
     }
 
     T const &value() const
     {
+	assert(!empty);
 	return _value;
     }
 
@@ -58,6 +61,23 @@ struct Optional
 	}
     }
 
+    template <typename F>
+    bool do_value(F const &func)
+    {
+	if (!empty)
+	    func(value());
+	return !empty;
+    }
+
+    template <typename F>
+    Optional<typename FunctionTraits<F>::Result>
+    map(F const &func) const
+    {
+	if (!empty)
+	    return Optional<typename FunctionTraits<F>::Result>(func(value()));
+	return Optional<typename FunctionTraits<F>::Result>();
+    }
+
     T const &assert_value() const
     {
 	assert(!empty);
@@ -77,5 +97,16 @@ struct Optional<T &>
     // references are no entities by themselves. use a pointer instead.
 };
 
+template <typename T>
+inline Optional<T> optional(T const &t)
+{
+    return Optional<T>(t);
+}
+
+template <typename T>
+inline Optional<T> empty()
+{
+    return Optional<T>();
+}
 
 #endif

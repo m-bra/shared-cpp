@@ -14,6 +14,8 @@ struct ViewConfig
     float zoom_per_scroll;
 };
 
+void scroll(glm::mat4 &view, float scroll, glm::vec2 focus, ViewConfig const &config);
+void mouse_move(glm::mat4 &view, glm::vec2 movement, ViewConfig const &config);
 }
 
 #endif
