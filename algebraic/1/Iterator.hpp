@@ -1,6 +1,7 @@
 #ifndef SELECTOR_HPP_INCLUDED
 #define SELECTOR_HPP_INCLUDED
 
+#include "FunctionTraits.hpp"
 #include "Optional.hpp"
 #include <vector>
 
@@ -54,34 +55,11 @@ struct FilterIterator
     }
 };
 
-#ifndef MAP_FUNCTION_DEFINED
-#define MAP_FUNCTION_DEFINED
-
-template <typename F>
-struct MapFunction
-{
-    typedef typename F::Result Result;
-};
-
-template <typename R, typename T>
-struct MapFunction<R (*)(T)>
-{
-    typedef R Result;
-};
-
-template <typename R, typename T>
-struct MapFunction<R(T)>
-{
-    typedef R Result;
-};
-
-#endif
-
 // F is a function: R(Element) or R(Element &) or R(Element const &)
 template <typename F, typename I>
 struct MapIterator
 {
-    typedef typename MapFunction<F>::Result Element;
+    typedef typename FunctionTraits<F>::Result Element;
     I _iterator;
     F _function;
 

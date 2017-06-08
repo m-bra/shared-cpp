@@ -76,13 +76,24 @@ struct Slots
         LOG_WARNING("No more space for new slots. Killing oldest slots now.");
 	for (auto it = _slots; it != _slots + (size_t)(0.3 * N); ++it)
 	    it->empty = true;
-	add(elt);
-	return 0;
+	return add(elt);
     }
 
     bool contains_slot(Slot<T> *id) const
     {
-	return id > _slots.data() && id < _slots.data() + _slots.size();
+	return id >= &_slots[0] && id < &_slots[N];
+    }
+
+    Slot<T> *slot_at(size_t i)
+    {
+	assert(i < N);
+	return &_slots[i];
+    }
+
+    size_t slot_i(Slot<T> *slot)
+    {
+	assert(contains_slot(slot));
+	return slot - slot_at(0);
     }
 };
 

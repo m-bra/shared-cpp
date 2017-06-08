@@ -78,6 +78,15 @@ struct Optional
 	return Optional<typename FunctionTraits<F>::Result>();
     }
 
+    template <typename F>
+    typename FunctionTraits<F>::Result
+    and_then(F const &func) const
+    {
+	if (!empty)
+	    return func(value());
+	return typename FunctionTraits<F>::Result();
+    }
+
     T const &assert_value() const
     {
 	assert(!empty);
@@ -88,6 +97,52 @@ struct Optional
     {
 	assert(!empty);
 	return value();
+    }
+};
+
+template<typename T>
+struct OptionalPtr
+{
+    T *_value;
+
+    OptionalPtr()
+    {
+	_value = 0;
+    }
+
+    OptionalPtr(T *value)
+    {
+	_value = value;
+    }
+
+    T *non_null()
+    {
+	assert(_value);
+	return _value;
+    }
+
+    T const *non_null() const
+    {
+	assert(_value);
+	return _value;
+    }
+
+    template <typename F>
+    bool do_value(F const &func)
+    {
+	if (_value)
+	    func(_value);
+	return _value;
+    }
+
+    bool is_null()
+    {
+	return _value;
+    }
+
+    T *maybe_null()
+    {
+	return _value;
     }
 };
 

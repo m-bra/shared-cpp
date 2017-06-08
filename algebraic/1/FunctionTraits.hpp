@@ -10,7 +10,22 @@ struct FunctionTraits
 {};
 
 template <typename C, typename R, typename... A>
+struct FunctionTraits<R (C::*)(A...)>
+    : public FunctionTraits<R(A...)>
+{};
+
+template <typename C, typename R, typename... A>
 struct FunctionTraits<R (C::*)(A...) const>
+    : public FunctionTraits<R(A...)>
+{};
+
+template <typename R, typename... A>
+struct FunctionTraits<R (*)(A...)>
+    : public FunctionTraits<R(A...)>
+{};
+
+template <typename R, typename... A>
+struct FunctionTraits<R(A...)>
 {
     static constexpr size_t arity = sizeof...(A);
     // arity is the number of arguments.
@@ -23,5 +38,10 @@ struct FunctionTraits<R (C::*)(A...) const>
         typedef typename std::tuple_element<i, std::tuple<A...>>::type Type;
     };
 };
+
+template <typename R, typename... A>
+struct FunctionTraits<R (A...) const>
+    : public FunctionTraits<R(A...)>
+{};
 
 #endif
